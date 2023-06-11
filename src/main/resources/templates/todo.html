@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<div>
+    <form th:action = "@{/todo/create}" method="post">
+        <label for="todo-desc">새 할일: <input type="text" id="todo-desc" name="todo-desc"> </label>
+        <input type="submit" value="생성">
+    </form>
+</div>
+</body>
+</html>
