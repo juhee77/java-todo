@@ -4,10 +4,7 @@ import com.lahee.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/todo")
@@ -27,6 +24,12 @@ public class TodoController {
         model.addAttribute("dones", todoService.readDones());
 
         return "/todo";
+    }
+
+    @PostMapping("/done/{id}")
+    public String done(@PathVariable("id") Long id) {
+        todoService.done(id);
+        return "redirect:/todo";
     }
 
 

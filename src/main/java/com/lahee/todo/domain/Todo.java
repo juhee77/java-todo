@@ -14,4 +14,7 @@ public class Todo {
     private String content;
     private Status status;
 
+    public void done() {
+        this.status = Status.DONE;
+    }
 }

@@ -16,15 +16,20 @@ public class TodoService {
     private final TodoRepository todoRepository;
 
     public void save(String msg) {
-        Todo save = todoRepository.save(new Todo((long) todoRepository.getTodos().size(), msg, Status.TODO));
+        Todo save = todoRepository.save(new Todo((long) todoRepository.getAllTodos().size(), msg, Status.TODO));
         log.info("saved todo : {}", save.getContent());
     }
 
     public List<Todo> readTodos() {
-        return todoRepository.getTodos().values().stream().toList();
+        return todoRepository.getTodos().orElseThrow();
     }
 
     public List<Todo> readDones() {
-        return todoRepository.getDones().values().stream().toList();
+        return todoRepository.getDones().orElseThrow();
+    }
+
+    public void done(Long id) {
+        Todo todo = todoRepository.findById(id);
+        todo.done();
     }
 }

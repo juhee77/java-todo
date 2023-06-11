@@ -20,6 +20,12 @@
         <div th:unless="${todos.isEmpty()}" th:each="todo: ${todos}">
             <p>내용: [[${todo.content}]]</p>
             <p>상태: [[${todo.status}]]</p>
+            <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post">
+                <input type="submit" value="완료">
+            </form>
+            <form>
+                <input type="submit" value="삭제">
+            </form>
         </div>
     </div>
     <div>
@@ -30,6 +36,12 @@
         <div th:unless="${dones.isEmpty()}" th:each="done: ${dones}">
             <p>내용: [[${done.content}]]</p>
             <p>상태: [[${done.status}]]</p>
+            <form>
+                <input type="submit" value="취소">
+            </form>
+            <form>
+                <input type="submit" value="삭제">
+            </form>
         </div>
     </div>
 </div>
