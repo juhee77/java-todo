@@ -22,18 +22,18 @@ public class TodoController {
     public String home(Model model) {
         model.addAttribute("todos", todoService.readTodos());
         model.addAttribute("dones", todoService.readDones());
-
+        model.addAttribute("all", todoService.readAll());
         return "/todo";
     }
 
     @PostMapping("/done/{id}")
-    public String done(@PathVariable("id") Long id) {
+    public String updateDone(@PathVariable("id") Long id) {
         todoService.done(id);
         return "redirect:/todo";
     }
 
     @PostMapping("/undone/{id}")
-    public String undone(@PathVariable("id") Long id) {
+    public String updateUnDone(@PathVariable("id") Long id) {
         todoService.undone(id);
         return "redirect:/todo";
     }

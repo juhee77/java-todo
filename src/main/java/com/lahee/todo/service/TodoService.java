@@ -42,4 +42,8 @@ public class TodoService {
         Todo todo = todoRepository.findById(id);
         todo.delete();
     }
+
+    public List<Todo> readAll() {
+        return todoRepository.getAllTodos().values().stream().toList();
+    }
 }
