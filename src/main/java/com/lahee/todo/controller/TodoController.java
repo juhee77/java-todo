@@ -32,5 +32,17 @@ public class TodoController {
         return "redirect:/todo";
     }
 
+    @PostMapping("/undone/{id}")
+    public String undone(@PathVariable("id") Long id) {
+        todoService.undone(id);
+        return "redirect:/todo";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        todoService.deleteDone(id);
+        return "redirect:/todo";
+    }
+
 
 }

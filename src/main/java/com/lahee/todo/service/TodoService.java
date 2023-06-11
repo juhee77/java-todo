@@ -32,4 +32,14 @@ public class TodoService {
         Todo todo = todoRepository.findById(id);
         todo.done();
     }
+
+    public void undone(Long id) {
+        Todo todo = todoRepository.findById(id);
+        todo.undone();
+    }
+
+    public void deleteDone(Long id) {
+        Todo todo = todoRepository.findById(id);
+        todo.delete();
+    }
 }

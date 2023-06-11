@@ -23,7 +23,7 @@
             <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post">
                 <input type="submit" value="완료">
             </form>
-            <form>
+            <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post">
                 <input type="submit" value="삭제">
             </form>
         </div>
@@ -36,10 +36,10 @@
         <div th:unless="${dones.isEmpty()}" th:each="done: ${dones}">
             <p>내용: [[${done.content}]]</p>
             <p>상태: [[${done.status}]]</p>
-            <form>
+            <form th:action="@{/todo/undone/{id}(id=${done.id})}" method="post">
                 <input type="submit" value="취소">
             </form>
-            <form>
+            <form th:action="@{/todo/delete/{id}(id=${done.id})}" method="post">
                 <input type="submit" value="삭제">
             </form>
         </div>

@@ -17,4 +17,12 @@ public class Todo {
     public void done() {
         this.status = Status.DONE;
     }
+
+    public void undone() {
+        this.status = Status.TODO;
+    }
+
+    public void delete() {
+        this.status = Status.DELETED;
+    }
 }
