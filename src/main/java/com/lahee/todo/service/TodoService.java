@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -15,6 +17,14 @@ public class TodoService {
 
     public void save(String msg) {
         Todo save = todoRepository.save(new Todo((long) todoRepository.getTodos().size(), msg, Status.TODO));
-        log.info("saved todo : {}",save.getContent());
+        log.info("saved todo : {}", save.getContent());
+    }
+
+    public List<Todo> readTodos() {
+        return todoRepository.getTodos().values().stream().toList();
+    }
+
+    public List<Todo> readDones() {
+        return todoRepository.getDones().values().stream().toList();
     }
 }

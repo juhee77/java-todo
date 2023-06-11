@@ -3,6 +3,7 @@ package com.lahee.todo.controller;
 import com.lahee.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,10 @@ public class TodoController {
     }
 
     @GetMapping
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("todos", todoService.readTodos());
+        model.addAttribute("dones", todoService.readDones());
+
         return "/todo";
     }
 

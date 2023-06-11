@@ -6,10 +6,32 @@
 </head>
 <body>
 <div>
-    <form th:action = "@{/todo/create}" method="post">
-        <label for="todo-desc">새 할일: <input type="text" id="todo-desc" name="todo-desc"> </label>
-        <input type="submit" value="생성">
-    </form>
+    <div>
+        <form th:action="@{/todo/create}" method="post">
+            <label for="todo-desc">새 할일: <input type="text" id="todo-desc" name="todo-desc"> </label>
+            <input type="submit" value="생성">
+        </form>
+    </div>
+    <div>
+        <h5>해야할 일</h5>
+        <div th:if="${todos.isEmpty()}">
+            <p>No todos </p>
+        </div>
+        <div th:unless="${todos.isEmpty()}" th:each="todo: ${todos}">
+            <p>내용: [[${todo.content}]]</p>
+            <p>상태: [[${todo.status}]]</p>
+        </div>
+    </div>
+    <div>
+        <h5>완료한 일</h5>
+        <div th:if="${dones.isEmpty()}">
+            <p>No todos </p>
+        </div>
+        <div th:unless="${dones.isEmpty()}" th:each="done: ${dones}">
+            <p>내용: [[${done.content}]]</p>
+            <p>상태: [[${done.status}]]</p>
+        </div>
+    </div>
 </div>
 </body>
 </html>
