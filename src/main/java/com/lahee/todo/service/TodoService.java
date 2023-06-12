@@ -56,4 +56,10 @@ public class TodoService {
     private Todo getTodo(Long id) {
         return todoRepository.findById(id).orElseThrow(() -> new RuntimeException("없는 TODO입니다."));
     }
+
+    @Transactional
+    public void modifyContent(Long id, String msg) {
+        Todo todo = getTodo(id);
+        todo.modifyContent(msg);
+    }
 }

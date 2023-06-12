@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <style>
         @font-face {
             font-family: 'OTWelcomeRA';
@@ -43,6 +47,11 @@
                     <div class="card-body">
                         <p>내용: [[${todo.content}]]</p>
                         <div class="d-flex justify-content-end">
+                            <form class="mr-2">
+                                <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                        th:data-target="'#modifyModal' + ${todo.id}">수정
+                                </button>
+                            </form>
                             <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post" class="mr-2">
                                 <button type="submit" class="btn btn-success">완료</button>
                             </form>
@@ -52,8 +61,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 수정 모달 -->
+                <div class="modal fade" th:id="'modifyModal' + ${todo.id}" tabindex="-1" role="dialog"
+                     th:aria-labelledby="'modifyModalLabel' + ${todo.id}" th:aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" th:id="'modifyModalLabel' + ${todo.id}">할일 수정</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/todo/modify/{id}(id=${todo.id})}" method="post">
+                                    <div class="form-group">
+                                        <label for="modified-content">수정할 내용:</label>
+                                        <input type="text" class="form-control" id="modified-content"
+                                               name="modified-content" th:value="${todo.content}">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">수정 완료</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+
         <div class="col-md-6">
             <h5>완료한 일</h5>
             <div th:if="${dones.isEmpty()}">

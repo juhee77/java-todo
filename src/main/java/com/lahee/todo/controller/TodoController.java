@@ -26,6 +26,13 @@ public class TodoController {
         return "/todo";
     }
 
+    @PostMapping("/modify/{id}")
+    public String modifyContent(@PathVariable("id") Long id, @RequestParam("modified-content") String msg) {
+        todoService.modifyContent(id, msg);
+        return "redirect:/todo";
+    }
+
+
     @PostMapping("/done/{id}")
     public String updateDone(@PathVariable("id") Long id) {
         todoService.done(id);
