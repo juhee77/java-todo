@@ -9,18 +9,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-import static jakarta.persistence.GenerationType.AUTO;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
 public class Todo {
     @Id
-    @GeneratedValue(strategy = AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = null;
     private String content;
-    @Enumerated(EnumType.ORDINAL)
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @CreationTimestamp

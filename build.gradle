@@ -24,7 +24,8 @@ dependencies {
 
 	//jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	implementation 'mysql:mysql-connector-java:8.0.32'
+//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	//dev tools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
