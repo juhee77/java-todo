@@ -2,6 +2,7 @@ package com.lahee.todo.controller;
 
 import com.lahee.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/todo")
 @RequiredArgsConstructor
+@Slf4j
 public class TodoController {
     private final TodoService todoService;
+
+    @ResponseBody
+    @RequestMapping("/test")
+    public String test() {
+        return "it's page is work";
+    }
 
     @PostMapping("/create")
     public String create(@RequestParam("todo-desc") String msg) {
@@ -23,7 +31,8 @@ public class TodoController {
         model.addAttribute("todos", todoService.readTodos());
         model.addAttribute("dones", todoService.readDones());
         model.addAttribute("all", todoService.readAll());
-        return "/todo";
+        log.info("{}", todoService.readTodos());
+        return "todo";
     }
 
     @PostMapping("/modify/{id}")
@@ -50,6 +59,4 @@ public class TodoController {
         todoService.deleteDone(id);
         return "redirect:/todo";
     }
-
-
 }

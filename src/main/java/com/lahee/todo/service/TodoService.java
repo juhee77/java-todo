@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +42,8 @@ public class TodoService {
     private static List<TodoResponseDto> convertToDtoList(List<Todo> todo1) {
         return todo1
                 .stream()
-                .map(todo -> new TodoResponseDto(todo.getContent(), todo.getStatus().toString()))
-                .collect(Collectors.toList());
+                .map(TodoResponseDto::getInstance)
+                .toList();
     }
 
     @Transactional
