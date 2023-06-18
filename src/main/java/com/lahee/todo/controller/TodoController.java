@@ -20,6 +20,12 @@ public class TodoController {
         return "it's page is work";
     }
 
+    @ResponseBody
+    @RequestMapping("/CICD")
+    public String testCICD() {
+        return "it's page is work";
+    }
+
     @PostMapping("/create")
     public String create(@RequestParam("todo-desc") String msg) {
         todoService.save(msg);
