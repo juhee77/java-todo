@@ -4,17 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import static jakarta.persistence.FetchType.LAZY;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
-public class Todo {
+public class Todo extends BaseEntity {
     @Id
+    @Column(name = "todo_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = null;
     private String content;
@@ -22,12 +21,9 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @CreationTimestamp
-    LocalDateTime createdAt;
-    @UpdateTimestamp
-    LocalDateTime modifiedAt;
-    LocalDateTime deletedAt;
-
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Todo(String content, Status status) {
         this.content = content;
