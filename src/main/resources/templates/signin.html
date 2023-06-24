@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sign In</h1>
+    <form method="post" action="/signin" id="sign-in-form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="username" name="username" required>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" id="check-username" name="check-username">Check
+                    </button>
+                </div>
+            </div>
+            <small id="username-message" class="form-text"></small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="repassword">Confirm Password:</label>
+            <input type="password" class="form-control" id="repassword" name="repassword" required>
+            <small class="error-message d-none">비밀번호가 다릅니다.</small>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Sign In</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var isUsernameAvailable = false;
+        var isPassword = false;
+
+        // Check username availability
+        $('#check-username').click(function () {
+            const username = $('#username').val();
+            const usernameMessage = $('#username-message');
+
+            $.ajax({
+                type: 'POST',
+                url: '/check-username',
+                data: {username: username},
+                success: function (response) {
+                    if (response.available) {
+                        isUsernameAvailable = true;
+                        usernameMessage.text('사용 가능한 사용자 이름입니다.').removeClass('text-danger').addClass('text-success');
+                    } else {
+                        isUsernameAvailable = false;
+                        usernameMessage.text('이미 사용 중인 사용자 이름입니다.').removeClass('text-success').addClass('text-danger');
+                    }
+                }
+            });
+        });
+
+        // Validate password and repassword
+        $('#repassword').on('input', function () {
+            const password = $('#password').val();
+            const repassword = $(this).val();
+            const errorLabel = $('.error-message');
+
+            if (password !== repassword) {
+                isPassword = false;
+                errorLabel.removeClass('d-none');
+            } else {
+                isPassword = true;
+                errorLabel.addClass('d-none');
+            }
+        });
+
+        // Form submit handler
+        $('#sign-in-form').submit(function (event) {
+            if (!isUsernameAvailable) {
+                event.preventDefault();
+                alert("이름을 확인해 주세요");
+                $('#username').focus();
+            }
+            if (!isPassword) {
+                event.preventDefault();
+                alert("비밀번호를 확인해 주세요");
+                $('#repassword').focus();
+            }
+        });
+    });
+</script>
+</body>
+</html>
