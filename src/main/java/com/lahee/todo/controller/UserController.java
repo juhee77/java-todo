@@ -24,14 +24,14 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/signup")
-    public String signUp() {
-        return "signup";
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
-    @GetMapping("/signin")
-    public String signIn() {
-        return "signin";
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
     }
 
     @PostMapping("/check-username")
@@ -42,9 +42,9 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/signup")
-    public String signUpPost(HttpServletRequest request, UserRequestDto userRequestDto, Model model) {
-        UserDto signup = userService.signup(userRequestDto);
+    @PostMapping("/login")
+    public String loginPost(HttpServletRequest request, UserRequestDto userRequestDto) {
+        UserDto signup = userService.login(userRequestDto);
 
         //세션에 저장
         HttpSession session = request.getSession();
@@ -53,9 +53,9 @@ public class UserController {
 
     }
 
-    @PostMapping("/signin")
-    public String signinPost(UserSignInRequestDto userRequestDto, Model model) {
-        userService.signin(userRequestDto);
-        return "redirect:/signup";
+    @PostMapping("/signup")
+    public String signupPost(UserSignInRequestDto userRequestDto) {
+        userService.signup(userRequestDto);
+        return "redirect:/login";
     }
 }

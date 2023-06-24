@@ -48,7 +48,7 @@ dependencies {
     implementation 'org.webjars:bootstrap'
 
     //security
-    implementation 'org.springframework.security:spring-security-core'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 }
 

@@ -17,7 +17,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserDto signup(UserRequestDto userRequestDto) {
+    public UserDto login(UserRequestDto userRequestDto) {
         User user = userRepository.findUserByName(userRequestDto.getUsername()).orElseThrow(() -> new RuntimeException("아이디가 잘못되었습니다."));
         if (validatePassword(user.getPassword(), userRequestDto.getPassword())) {
             return UserDto.fromEntity(user);
@@ -30,7 +30,7 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public void signin(UserSignInRequestDto userRequestDto) {
+    public void signup(UserSignInRequestDto userRequestDto) {
         String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
         User user = new User(userRequestDto.getUsername(), encodedPassword, userRequestDto.getEmail());
         userRepository.save(user);
