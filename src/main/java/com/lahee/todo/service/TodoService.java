@@ -2,7 +2,7 @@ package com.lahee.todo.service;
 
 import com.lahee.todo.domain.Status;
 import com.lahee.todo.domain.Todo;
-import com.lahee.todo.domain.dto.TodoResponseDto;
+import com.lahee.todo.dto.TodoResponseDto;
 import com.lahee.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,20 +48,17 @@ public class TodoService {
 
     @Transactional
     public void done(Long id) {
-        Todo todo = getTodo(id);
-        todo.done();
+        getTodo(id).done();
     }
 
     @Transactional
     public void undone(Long id) {
-        Todo todo = getTodo(id);
-        todo.undone();
+        getTodo(id).undone();
     }
 
     @Transactional
     public void deleteDone(Long id) {
-        Todo todo = getTodo(id);
-        todo.delete();
+        getTodo(id).delete();
     }
 
     private Todo getTodo(Long id) {
