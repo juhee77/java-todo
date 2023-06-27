@@ -2,9 +2,11 @@ package com.lahee.todo.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -13,6 +15,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 public class User extends BaseEntity {
     @Id
     @Column(name = "user_id", nullable = false)
@@ -24,11 +27,10 @@ public class User extends BaseEntity {
     private String email;
 
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Todo> todos;
+    @Builder.Default
+    private List<Todo> todos = new ArrayList<>();
 
-    public User(String name, String password, String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-    }
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 }

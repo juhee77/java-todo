@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -10,5 +10,9 @@
     <span th:unless="${name}">반갑습니다 :)</span>
     hello:)
 </h1>
+<!-- 인증되지 않은(로그인하지 않은) 사용자에게 보임 -->
+<button sec:authorize="isAnonymous()" type="button" onclick="location.href='/login'">로그인</button>
+<!-- 인증된(로그인한) 사용자에게 보임 -->
+<button sec:authorize="isAuthenticated()" type="button" onclick="location.href='/logout'">로그아웃</button>
 </body>
 </html>
