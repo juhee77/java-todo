@@ -14,6 +14,6 @@ public class UserDto {
 
 
     public static UserDto fromEntity(User user) {
-        return new UserDto(user.getName(), user.getEmail());
+        return new UserDto(user.getUsername(), user.getEmail());
     }
 }
