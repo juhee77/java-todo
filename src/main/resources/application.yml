@@ -16,9 +16,12 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
-#      hibernate.dialect: org.hibernate.dialect.MariaDBDialect
 
+#server:
+#  port: 8081
+#      hibernate.dialect: org.hibernate.dialect.MariaDBDialect
 # debug: true
+
 logging:
   level:
     root: INFO
@@ -29,6 +32,7 @@ logging:
 
 jwt:
   secret : ${MY_JWT_KEY}
-  token-validity-in-seconds : ${MY_JWT_KEY_DURATION}
+  access-token:
+    expiration : ${ACCESS_TOKEN_DURATION}
   refresh-token:
-    expiration: 604800000 # 7 days
+    expiration: ${REFRESH_TOKEN_DURATION}

@@ -27,25 +27,31 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;//30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; //7일
+    private final long accessTokenExpireTime;
+    private final long refreshTokenExpireTime;
 
     private final String secret;
     private Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secret) {
+    public TokenProvider(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.access-token.expiration}") String accessTokenExpireTime,
+            @Value("${jwt.refresh-token.expiration}") String refreshTokenExpireTime) {
         this.secret = secret;
+        this.accessTokenExpireTime = Long.parseLong(accessTokenExpireTime);
+        this.refreshTokenExpireTime = Long.parseLong(refreshTokenExpireTime);
     }
 
     //실제 로그인시 발급하는 토큰
     public TokenDto generateTokenDto(Authentication authentication) {
+        log.info("generatetoken  {} ",authentication);
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         long now = new Date().getTime();
 
         //access token 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date accessTokenExpiresIn = new Date(now + accessTokenExpireTime);
         String accessToken = Jwts.builder()
 //                .setHeader(header)
                 .setSubject(authentication.getName()) //payload
@@ -55,7 +61,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
         //refresh token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(new Date(now + refreshTokenExpireTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 

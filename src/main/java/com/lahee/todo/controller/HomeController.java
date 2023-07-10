@@ -2,6 +2,8 @@ package com.lahee.todo.controller;
 
 import com.lahee.todo.service.UserService;
 import com.lahee.todo.util.SecurityUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,8 +25,6 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model) {
-        //TODO 홈 방명록 생성
-
         Optional<String> currentUserName = SecurityUtil.getCurrentUserName();
         if (currentUserName.isPresent()) {
             String name = currentUserName.get();
@@ -33,4 +33,6 @@ public class HomeController {
         }
         return "home";
     }
+
+
 }

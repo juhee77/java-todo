@@ -1,6 +1,7 @@
 package com.lahee.todo.config.security;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +15,13 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilter {
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
     private final TokenProvider tokenProvider;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String jwt = resolveToken((HttpServletRequest) request);
+        String jwt = resolveAccessToken((HttpServletRequest) request);
+        log.error("jwt {} ", jwt);
         String requestURI = httpServletRequest.getRequestURI();
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -31,13 +31,30 @@ public class JwtFilter extends GenericFilter {
         } else {
             log.info("유효한 JWT토큰이 없습니다. uri:{}", requestURI);
         }
+        //여기서 리프레시 토큰 발급하면 된다.
+
         chain.doFilter(request, response);
     }
 
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.split(" ")[1].trim();
+    private String resolveAccessToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("accessToken")) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    //이후에 리프레시 토큰 사용시를 위해서
+    private String resolveRefreshToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("refreshToken")) {
+                return cookie.getValue();
+            }
         }
         return null;
     }

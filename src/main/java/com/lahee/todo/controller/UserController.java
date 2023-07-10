@@ -45,24 +45,25 @@ public class UserController {
     public String loginPost(HttpServletResponse res, LoginDto loginDto) {
         TokenDto tokenDto = userService.login(loginDto);
 
-//        Map<String, Object> user = new HashMap<>();
-//        session.setAttribute("name", loginDto.getUsername());
-//        Cookie cookie = createRefreshTokenCookie(tokenDto.getRefreshToken());
-//        res.addCookie(cookie);
-
         log.info("LOGIN {}", tokenDto.getAccessToken());
-        res.setHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        res.setHeader("refreshtoken", "Bearer " + tokenDto.getRefreshToken());
+        res.addCookie(createAccessTokenCookie(tokenDto.getAccessToken()));
+        res.addCookie(createRefreshTokenCookie(tokenDto.getRefreshToken()));
+
+        log.error("{HEADER} :{]");
         return "redirect:/home";
 
     }
 
     @GetMapping("/logout")
     public String loginPost(HttpServletResponse res) {
-        Cookie cookie = new Cookie("login_token", "");
+        Cookie cookie = new Cookie("accessToken", "");
         cookie.setPath("/");
         cookie.setMaxAge(0);
         res.addCookie(cookie);
+        Cookie cookie2 = new Cookie("refreshToken", "");
+        cookie2.setPath("/");
+        cookie2.setMaxAge(0);
+        res.addCookie(cookie2);
         return "redirect:/home";
 
     }
@@ -73,12 +74,21 @@ public class UserController {
         return "redirect:/login";
     }
 
-
     private Cookie createRefreshTokenCookie(String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(30 * 24 * 60 * 60); // 30일 유효 기간 설정 (초 단위)
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setHttpOnly(true);
+        return cookie;
+    }
+
+    private Cookie createAccessTokenCookie(String accessToken) {
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setHttpOnly(true);
         return cookie;
     }
 }
