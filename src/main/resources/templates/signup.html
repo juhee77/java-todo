@@ -13,7 +13,7 @@
 <body>
 <div class="container">
     <h1>Sign up</h1>
-    <form method="post" action="/signup" id="sign-up-form">
+    <form method="post" action="/users/signup" id="sign-up-form">
         <div class="form-group">
             <label for="username">Username:</label>
             <div class="input-group">
@@ -55,7 +55,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/check-username',
+                url: '/api/users/check-username',
                 data: {username: username},
                 success: function (response) {
                     if (response.available) {

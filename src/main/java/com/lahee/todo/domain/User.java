@@ -19,16 +19,21 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
     private String password;
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Authority authority;
 
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todos;
 
-    public User(String name, String password, String email) {
-        this.name = name;
+    public User(String username, String password, String email) {
+        this.username = username;
         this.password = password;
         this.email = email;
+        this.authority = com.lahee.todo.domain.Authority.USER;
     }
 }

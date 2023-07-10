@@ -44,9 +44,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // Bootstrap
-    implementation 'org.webjars:bootstrap'
-
     //security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 

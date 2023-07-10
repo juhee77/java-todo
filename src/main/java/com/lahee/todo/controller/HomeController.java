@@ -1,10 +1,10 @@
 package com.lahee.todo.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @Slf4j
@@ -15,10 +15,13 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(@SessionAttribute(name = "login_member", required = false)String name, Model model) {
+    public String home(Authentication authentication, Model model) {
         //TODO 홈 방명록 생성
-        log.info("home.log {}", name);
-        model.addAttribute("name", name);
+
+        if (authentication != null) {
+            log.info("home.log {}", authentication.getName());
+            model.addAttribute("name", authentication.getName());
+        }
         return "home";
     }
 }
