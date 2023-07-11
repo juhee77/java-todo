@@ -3,12 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .message {
+            margin-bottom: 20px;
+        }
+
+        .heart-icon {
+            color: red;
+        }
+
+        .new-message-form {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome,
-    <span th:if="${name}" th:text="${name}"></span>
-    <span th:unless="${name}">반갑습니다 :)</span>
-    hello:)
-</h1>
+<div class="container mt-5">
+    <h1>안녕하세요 <i class="fas fa-smile"></i></h1>
+    <h5>
+        <span th:if="${name}" th:text="${name}"></span>
+        <span th:unless="${name}">익명의 사용자</span>
+        님 반갑습니다.
+    </h5>
+
+    <div style="padding: 10px">
+        <h5>지금까지 입력된 방명록이에요 </h5>
+
+        <!-- 기존 방명록 목록 -->
+        <div th:if="${messages == null} or ${messages.isEmpty()}">
+            작성된 방명록이 없어요.. 하나 적어주세요 :)
+        </div>
+        <div class="row" th:if="${messages != null}">
+            <div th:each="message : ${messages}" th:limit="10" th:order-by="-heartCnt" class="col-md-6">
+                <div class="message card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${message.name}"></h5>
+                        <p class="card-text" th:text="${message.content}"></p>
+                        <button class="heart-icon btn btn-link" th:onclick="likeMessage(this, [[${message.id}]])">
+                            <i class="fas fa-heart"></i> <span th:text="${message.heartCnt}"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <button class="btn btn-primary" onclick="toggleNewMessageForm()">방명록 입력하기</button>
+        <form class="new-message-form mt-3" method="POST" action="/home/post">
+            <div class="form-group">
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="content">내용:</label>
+                <textarea id="content" name="content" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">게시하기</button>
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function likeMessage(button, messageId) {
+        console.log("HERE")
+        console.log(messageId)
+        // AJAX request to handle the like button click event
+        $.ajax({
+            type: "POST",
+            url: "/home/like",
+            data: {"messageId": messageId},
+            success: function (response) {
+                // Handle the success response if needed
+                console.log("Like button clicked successfully" + response);
+                location.href = location.href;
+            },
+            error: function (error) {
+                // Handle the error response if needed
+                console.error("Error occurred while clicking the like button: " + error);
+            }
+        });
+    }
+
+    function toggleNewMessageForm() {
+        var form = document.querySelector('.new-message-form');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>
+
 </body>
 </html>
