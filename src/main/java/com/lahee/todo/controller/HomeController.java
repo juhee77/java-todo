@@ -35,14 +35,12 @@ public class HomeController {
             model.addAttribute("name", authentication.getName());
         }
         Page<ResponseMessageDto> messages = guestBookMessageService.findByPage(page, limit);
-        if (!messages.isEmpty()) {
-            model.addAttribute("messages", messages);
-        }
+        model.addAttribute("messages", messages);
         return "home";
     }
 
     @PostMapping("/home/post")
-    public String savePost(@RequestParam("name") String name, @RequestParam("content") String content) {
+    public String savePost(@RequestParam(name = "name", defaultValue = "익명") String name, @RequestParam("content") String content) {
         log.info("save post");
         guestBookMessageService.save(name, content);
         return "redirect:/home";

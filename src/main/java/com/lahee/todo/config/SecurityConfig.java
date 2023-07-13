@@ -38,7 +38,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable) //cross site request 방지를 위한 추가(실제 배포 시에는 넣지 않는게 좋다)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(
-                        authHttp -> authHttp.requestMatchers("/api/users/check-username", "/users/signup", "/home", "/home/post", "/todo").permitAll() //누구든지 요청하는 허가
+                        authHttp -> authHttp.requestMatchers("/","/home/**", "/api/users/check-username", "/users/signup"
+                                        , "/todo").permitAll() //누구든지 요청하는 허가
+
 //                                .requestMatchers("/users/my-profile").authenticated()
 //                                .requestMatchers("/").anonymous()//인증이 되지 않은 사용자만 허가
                                 .anyRequest().authenticated() //나머지 요청에 대해서 인증된 사용자만

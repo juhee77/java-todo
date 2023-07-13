@@ -19,7 +19,7 @@ public class GuestBookMessageService {
     private final GuestBookMessageRepository guestBookMessageRepository;
 
     public Page<ResponseMessageDto> findByPage(int page, int limit) {
-        return guestBookMessageRepository.findAll(PageRequest.of(page, limit, Sort.by("heartCnt"))).map(ResponseMessageDto::fromEntity);
+        return guestBookMessageRepository.findAll(PageRequest.of(page, limit, Sort.by("id").reverse())).map(ResponseMessageDto::fromEntity);
     }
 
     @Transactional
