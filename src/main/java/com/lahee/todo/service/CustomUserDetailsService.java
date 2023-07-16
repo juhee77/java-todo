@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsManager {
         this.passwordEncoder = passwordEncoder;
 
         //test 유저
-        createUser(CustomUserDetails.builder().username("test").password(passwordEncoder.encode("test")).email("test@qwer").build());
+//        createUser(CustomUserDetails.builder().username("test").password(passwordEncoder.encode("test")).email("test@qwer").build());
     }
 
     @Override
