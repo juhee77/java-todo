@@ -1,4 +1,4 @@
-package com.lahee.todo.domain.dto;
+package com.lahee.todo.dto;
 
 import com.lahee.todo.domain.Todo;
 import lombok.AllArgsConstructor;

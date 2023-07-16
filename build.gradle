@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.0'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.lahee'
@@ -9,46 +9,47 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//jpa
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'mysql:mysql-connector-java:8.0.32'
+    //jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'mysql:mysql-connector-java:8.0.32'
 //	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	//dev tools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    //dev tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	//thymeleaf
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    //thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
-	//lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    //lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	//test
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//mockito
-	testImplementation 'org.mockito:mockito-core'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //mockito
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// Bootstrap
-	implementation 'org.webjars:bootstrap:5.3.0'
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
