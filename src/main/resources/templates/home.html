@@ -18,37 +18,61 @@
         .heart-icon {
             color: red;
         }
+
+        /* .header 클래스 스타일 - 오른쪽 정렬 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* .card-title 클래스 스타일 - 글자 크기와 굵기 설정 */
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* .time 클래스 스타일 - 글자 크기를 작게, 회색으로 표시 */
+        .card-text.time {
+            font-size: 12px;
+            color: #888;
+        }
+
     </style>
 </head>
 <body>
 <div class="container mt-5">
     <h1>안녕하세요 <i class="smile"></i></h1>
     <h5>
-        <div sec:authorize="isAuthenticated()">
-            Text visible only to authenticated users.
-        </div>
-        <span th:if="${name}" th:text="${name}"></span>
-        <span th:unless="${name}">익명의 사용
-            <!--TODO 회원가입 , 로그인 기능 버튼 추가 -->
-
-        </span>
+        <span sec:authorize="isAuthenticated()" th:text="${#authentication.name}"></span>
+        <span th:unless="${name}">익명의 사용자</span>
         님 반갑습니다.
     </h5>
 
     <div style="padding: 10px">
         <h5>지금까지 입력된 방명록이에요 </h5>
+        <div class="mt-3 mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">방명록
+                입력하기
+            </button>
+        </div>
+
 
         <!-- 기존 방명록 목록 -->
         <div th:if="${messages == null} or ${messages.isEmpty()}">
             작성된 방명록이 없어요.. 하나 적어주세요 :)
         </div>
+        <!-- HTML 코드 -->
         <div class="row" th:if="${messages != null}">
             <div th:each="message : ${messages}" th:limit="10" class="col-md-6">
                 <div class="message card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${message.name}"></h5>
-                        <h5 class="card-text" th:text="${message.time}"></h5>
-                        <p class="card-text" th:text="${message.content}"></p>
+                        <div class="header">
+                            <h5 class="card-title" th:text="${message.name}"></h5>
+                            <p class="card-text time" th:text="${message.time}"></p>
+                        </div>
+                        <p class="card-text content" th:text="${message.content}"></p>
                         <button class="heart-icon btn btn-link" th:onclick="likeMessage(this, [[${message.id}]])">
                             <i class="fas fa-heart"></i> <span th:text="${message.heartCnt}"></span>
                         </button>
@@ -84,13 +108,6 @@
         </nav>
     </ul>
 
-    <!-- Button trigger modal -->
-    <div class="container mt-5">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">방명록
-            입력하기
-        </button>
-    </div>
-
     <div id="newMessageModal" class="modal fade" tabindex="-1" aria-labelledby="newMessageModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -102,8 +119,11 @@
                         <div class="form-group">
                             <label for="name">이름:</label>
                             <div class="input-group">
-                                <input type="text" id="name" name="name" class="form-control" placeholder="이름"
+                                <input type="text" id="name" name="name" class="form-control"
+                                       th:value="${#authorization.expression('isAuthenticated()')} ? ${#authentication.name}"
+                                       th:placeholder="${#authorization.expression('isAuthenticated()')} ?'':'익명'"
                                        aria-label="이름">
+
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <input type="checkbox" id="anonymousCheckbox" onchange="toggleAnonymousName()">
