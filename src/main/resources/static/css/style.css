@@ -8,3 +8,8 @@
 * {
     font-family: 'OTWelcomeRA', fantasy;
 }
+
+
+input[type=password]{
+    font-family: "굴림", serif;
+}
