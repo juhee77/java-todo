@@ -1,141 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/default_layout">
 <head>
+
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <form th:action="@{/todo/create}" method="post">
-                <div class="form-group">
-                    <label for="todo-desc"><h5>새 할일:</h5></label>
-                    <input type="text" class="form-control" id="todo-desc" name="todo-desc">
-                </div>
-                <button type="submit" class="btn btn-primary">생성</button>
-            </form>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <h5>해야할 일</h5>
-            <div th:if="${todos.isEmpty()}">
-                <div class="alert alert-info">
-                    <p class="card-title">No todos</p>
-                </div>
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <form th:action="@{/todo/create}" method="post">
+                    <div class="mb-3">
+                        <label for="todo-desc" class="form-label"><h5>새 할일:</h5></label>
+                        <input type="text" class="form-control" id="todo-desc" name="todo-desc">
+                    </div>
+                    <button type="submit" class="btn btn-primary">생성</button>
+                </form>
             </div>
-            <div th:unless="${todos.isEmpty()}" th:each="todo: ${todos}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p>내용: [[${todo.content}]]</p>
-                        <div class="d-flex justify-content-end">
-                            <form class="mr-2">
-                                <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                        th:data-target="'#modifyModal' + ${todo.id}">수정
-                                </button>
-                            </form>
-                            <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post" class="mr-2">
-                                <button type="submit" class="btn btn-success">완료</button>
-                            </form>
-                            <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post">
-                                <button type="submit" class="btn btn-danger">삭제</button>
-                            </form>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h5>해야할 일</h5>
+                <div th:if="${todos.isEmpty()}">
+                    <div class="alert alert-info">
+                        <p class="card-title">No todos</p>
+                    </div>
+                </div>
+                <div th:unless="${todos.isEmpty()}" th:each="todo: ${todos}">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p>내용: [[${todo.content}]]</p>
+                            <div class="d-flex justify-content-end">
+                                <form class="m-1">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                            th:data-bs-target="'#modifyModal' + ${todo.id}">수정
+                                    </button>
+                                </form>
+                                <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post" class="m-1">
+                                    <button type="submit" class="btn btn-success">완료</button>
+                                </form>
+                                <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" class="m-1">
+                                    <button type="submit" class="btn btn-danger">삭제</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 수정 모달 -->
+                    <div class="modal fade" th:id="'modifyModal' + ${todo.id}" tabindex="-1"
+                         th:aria-labelledby="'modifyModalLabel' + ${todo.id}" th:aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" th:id="'modifyModalLabel' + ${todo.id}">할일 수정</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form th:action="@{/todo/modify/{id}(id=${todo.id})}" method="post">
+                                        <div class="mb-3">
+                                            <label for="modified-content" class="form-label">수정할 내용:</label>
+                                            <input type="text" class="form-control" id="modified-content"
+                                                   name="modified-content" th:value="${todo.content}">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">수정 완료</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 수정 모달 -->
-                <div class="modal fade" th:id="'modifyModal' + ${todo.id}" tabindex="-1" role="dialog"
-                     th:aria-labelledby="'modifyModalLabel' + ${todo.id}" th:aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" th:id="'modifyModalLabel' + ${todo.id}">할일 수정</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form th:action="@{/todo/modify/{id}(id=${todo.id})}" method="post">
-                                    <div class="form-group">
-                                        <label for="modified-content">수정할 내용:</label>
-                                        <input type="text" class="form-control" id="modified-content"
-                                               name="modified-content" th:value="${todo.content}">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">수정 완료</button>
+
+            <div class="col-md-6">
+                <h5>완료한 일</h5>
+                <div th:if="${dones.isEmpty()}">
+                    <div class="alert alert-info">
+                        <p>No dones</p>
+                    </div>
+                </div>
+                <div th:unless="${dones.isEmpty()}" th:each="done: ${dones}">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="card-text">내용: [[${done.content}]]</p>
+                            <div class="d-flex justify-content-end">
+                                <form th:action="@{/todo/undone/{id}(id=${done.id})}" method="post" class="m-1">
+                                    <button type="submit" class="btn btn-primary">취소</button>
+                                </form>
+                                <form th:action="@{/todo/delete/{id}(id=${done.id})}" method="post" class="m-1">
+                                    <button type="submit" class="btn btn-danger">삭제</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="col-md-6">
-            <h5>완료한 일</h5>
-            <div th:if="${dones.isEmpty()}">
-                <div class="alert alert-info">
-                    <p>No dones</p>
+            <div class="col-md-12">
+                <h5>모든 작업일</h5>
+                <div th:if="${all.isEmpty()}">
+                    <div class="alert alert-info">
+                        <p>No todos</p>
+                    </div>
                 </div>
-            </div>
-            <div th:unless="${dones.isEmpty()}" th:each="done: ${dones}">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p class="card-text">내용: [[${done.content}]]</p>
-                        <div class="d-flex justify-content-end">
-                            <form th:action="@{/todo/undone/{id}(id=${done.id})}" method="post" class="mr-2">
-                                <button type="submit" class="btn btn-primary">취소</button>
+                <div th:unless="${all.isEmpty()}" th:each="todo: ${all}">
+                    <div class="p-2">
+                        <span>내용: [[${todo.content}]]</span>
+                        <div th:if="${todo.status.toString() eq 'TODO'}" class="d-inline">
+                            <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-primary" value="완료">완료</button>
                             </form>
-                            <form th:action="@{/todo/delete/{id}(id=${done.id})}" method="post">
-                                <button type="submit" class="btn btn-danger">삭제</button>
+                            <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger" value="삭제">삭제</button>
                             </form>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <div th:if="${todo.status.toString() eq 'DONE'}" class="d-inline">
+                            <span>[완료됨]</span>
+                            <form th:action="@{/todo/undone/{id}(id=${todo.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-success">취소</button>
+                            </form>
+                            <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger">삭제</button>
+                            </form>
 
-
-        <div class="col-md-12">
-            <h5>모든 작업일</h5>
-            <div th:if="${all.isEmpty()}">
-                <div class="alert alert-info">
-                    <p>No todos</p>
+                        </div>
+                        <div th:if="${todo.status.toString() eq 'DELETED'}" class="d-inline">
+                            <span>[삭제됨]</span>
+                        </div>
+                    </div>
+                    <!--                <hr>-->
                 </div>
-            </div>
-            <div th:unless="${all.isEmpty()}" th:each="todo: ${all}">
-                <div class="p-2">
-                    <span>내용: [[${todo.content}]]</span>
-                    <div th:if="${todo.status.toString() eq 'TODO'}" class="d-inline">
-                        <form th:action="@{/todo/done/{id}(id=${todo.id})}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-primary" value="완료">완료</button>
-                        </form>
-                        <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger" value="삭제">삭제</button>
-                        </form>
-                    </div>
-                    <div th:if="${todo.status.toString() eq 'DONE'}" class="d-inline">
-                        <span>[완료됨]</span>
-                        <form th:action="@{/todo/undone/{id}(id=${todo.id})}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-success">취소</button>
-                        </form>
-                        <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger">삭제</button>
-                        </form>
-
-                    </div>
-                    <div th:if="${todo.status.toString() eq 'DELETED'}" class="d-inline">
-                        <span>[삭제됨]</span>
-                    </div>
-                </div>
-                <!--                <hr>-->
             </div>
         </div>
     </div>
