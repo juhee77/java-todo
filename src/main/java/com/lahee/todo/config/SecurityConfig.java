@@ -27,7 +27,9 @@ public class SecurityConfig {
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
                 .requestMatchers("/css/**")
-                .requestMatchers("/static/**");
+                .requestMatchers("/static/**")
+                .requestMatchers("/fragments/**")
+                .requestMatchers("/layout/**");
     }
 
     @Bean //메서드의 결과를 bean 객체로 등록해주는 어노테이션

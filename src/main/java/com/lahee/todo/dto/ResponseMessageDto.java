@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class ResponseMessageDto {
-    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy:MM:dd HH:mm:ss");
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy/MM/dd HH시 mm분");
     public static final String ASIA_SEOUL = "Asia/Seoul";
     private Long id;
     private String time;
