@@ -71,13 +71,7 @@ jobs:
             DOCKERHUB_REPOSITORY="${{ secrets.DOCKERHUB_REPOSITORY }}"
           
             cd /home/ubuntu/docker-file
-            docker-compose up -d \
-              -e DB_HOST=$DB_HOST \
-              -e DB_NAME=$DB_NAME \
-              -e DB_PASSWORD=$DB_PASSWORD \ 
-              -e DB_USER=$DB_USER \
-              -e DOCKERHUB_USERNAME = $DOCKERHUB_USERNAME \
-              -e DOCKERHUB_REPOSITORY = $DOCKERHUB_REPOSITORY
+            docker-compose up -d -e DB_HOST=$DB_HOST -e DB_NAME=$DB_NAME -e DB_PASSWORD=$DB_PASSWORD -e DB_USER=$DB_USER -e DOCKERHUB_USERNAME = $DOCKERHUB_USERNAME -e DOCKERHUB_REPOSITORY = $DOCKERHUB_REPOSITORY
 
 
   #시간 출력
