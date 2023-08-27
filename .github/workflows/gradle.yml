@@ -69,21 +69,15 @@ jobs:
             DB_USER="${{ secrets.DB_USER }}"
             DOCKERHUB_USERNAME="${{ secrets.DOCKERHUB_USERNAME }}"
             DOCKERHUB_REPOSITORY="${{ secrets.DOCKERHUB_REPOSITORY }}"
-            
-            echo "DB_HOST: $DB_HOST"
-            echo "DB_NAME: $DB_NAME"
-            echo "DB_PASSWORD: $DB_PASSWORD"
-            echo "DB_USER: $DB_USER"
-            echo "DOCKERHUB_USERNAME: $DOCKERHUB_USERNAME"
-            echo "DOCKERHUB_REPOSITORY: $DOCKERHUB_REPOSITORY"
-            
-            sudo docker pull $DOCKERHUB_USERNAME/$DOCKERHUB_REPOSITORY:latest
-            sudo docker stop todoApp || true
-            sudo docker rm todoApp || true
-            sudo docker image prune -a || true
-            
+          
             cd /home/ubuntu/docker-file
-            docker-compose up -d
+            docker-compose up -d \
+              -e DB_HOST=$DB_HOST \
+              -e DB_NAME=$DB_NAME \
+              -e DB_PASSWORD=$DB_PASSWORD \ 
+              -e DB_USER=$DB_USER \
+              -e DOCKERHUB_USERNAME = $DOCKERHUB_USERNAME \
+              -e DOCKERHUB_REPOSITORY = $DOCKERHUB_REPOSITORY
 
 
   #시간 출력
