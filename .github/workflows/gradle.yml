@@ -75,7 +75,7 @@ jobs:
             sudo docker rm todoApp || true
             sudo docker image prune
             
-            cd /docker-file
+            cd /home/ubuntu/docker-file
             docker-compose up -d
 
 
