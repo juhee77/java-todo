@@ -77,8 +77,8 @@ jobs:
             echo "DOCKERHUB_REPOSITORY=$DOCKERHUB_REPOSITORY" >> .env
             echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME" >> .env 
             
-            scp .env ubuntu@${{ secrets.AWS_HOST }}:/home/ubuntu/docker-file
-            ssh ubuntu@${{ secrets.AWS_HOST }} "cd /home/ubuntu/docker-file && docker-compose up -d"
+            cd /home/ubuntu/docker-file 
+            docker-compose up -d
 
   #시간 출력
   current-time:
