@@ -1,9 +1,14 @@
 package com.lahee.todo.domain;
 
+import com.lahee.todo.dto.todo.TodoDto;
+import com.lahee.todo.util.DateConversionUtil;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -25,9 +30,23 @@ public class Todo extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Todo(String content, Status status) {
-        this.content = content;
-        this.status = status;
+    private LocalDate scheduledDate;
+
+
+    public static Todo getInstance(TodoDto todoDto, User user) {
+        Todo todo = new Todo();
+        todo.status = Status.TODO;
+        todo.content = todoDto.getScheduleName();
+        todo.scheduledDate = DateConversionUtil.stringToLocalDateTime(todoDto.getScheduledDate());
+        todo.setUser(user);
+        return todo;
+    }
+
+    private void setUser(User user) {
+        if (!user.getTodos().contains(this)) {
+            user.getTodos().add(this);
+        }
+        this.user = user;
     }
 
     public void done() {
@@ -44,5 +63,16 @@ public class Todo extends BaseEntity {
 
     public void modifyContent(String msg) {
         this.content = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", status=" + status +
+                ", user=" + user.getId() +
+                ", scheduledDate=" + scheduledDate +
+                '}';
     }
 }

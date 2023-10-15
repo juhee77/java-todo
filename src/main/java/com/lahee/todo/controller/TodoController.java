@@ -1,11 +1,14 @@
 package com.lahee.todo.controller;
 
+import com.lahee.todo.dto.todo.TodoDto;
 import com.lahee.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import static com.lahee.todo.util.SecurityUtils.getCurrentUsername;
 
 @Controller
 @RequestMapping("/todo")
@@ -14,30 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class TodoController {
     private final TodoService todoService;
 
-    @ResponseBody
-    @RequestMapping("/test")
-    public String test() {
-        return "it's page is work";
-    }
-
-    @ResponseBody
-    @RequestMapping("/CICD")
-    public String testCICD() {
-        return "it's page is work";
-    }
-
-    @PostMapping("/create")
-    public String create(@RequestParam("todo-desc") String msg) {
-        todoService.save(msg);
+    @PostMapping
+    public String create(@ModelAttribute TodoDto todoDto) {
+        todoService.save(todoDto, getCurrentUsername());
         return "redirect:/todo";
     }
 
     @GetMapping
-    public String home(Model model) {
-        model.addAttribute("todos", todoService.readTodos());
-        model.addAttribute("dones", todoService.readDones());
-        model.addAttribute("all", todoService.readAll());
-        log.info("{}", todoService.readTodos());
+    public String getTodoview(Model model) {
+        model.addAttribute("todos", todoService.readTodos(getCurrentUsername()));
+        model.addAttribute("dones", todoService.readDones(getCurrentUsername()));
+        model.addAttribute("all", todoService.readAll(getCurrentUsername()));
+        log.info("{}", todoService.readTodos(getCurrentUsername()));
         return "todo";
     }
 

@@ -2,7 +2,9 @@ package com.lahee.todo.service;
 
 import com.lahee.todo.domain.Status;
 import com.lahee.todo.domain.Todo;
-import com.lahee.todo.dto.TodoResponseDto;
+import com.lahee.todo.domain.User;
+import com.lahee.todo.dto.todo.TodoDto;
+import com.lahee.todo.dto.todo.TodoResponseDto;
 import com.lahee.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,25 +19,30 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class TodoService {
     private final TodoRepository todoRepository;
+    private final UserService userService;
 
     @Transactional
-    public void save(String msg) {
-        Todo save = todoRepository.save(new Todo(msg, Status.TODO));
-        log.info("saved todo : {}", save.getContent());
+    public void save(TodoDto todoDto, String currentUsername) {
+        User user = userService.getByUsername(currentUsername);
+        Todo todo = todoRepository.save(Todo.getInstance(todoDto, user));
+        log.info("saved todo : {}", todo);
     }
 
-    public List<TodoResponseDto> readAll() {
-        return convertToDtoList(todoRepository.findAll());
+    public List<TodoResponseDto> readAll(String currentUsername) {
+        User user = userService.getByUsername(currentUsername);
+        return convertToDtoList(todoRepository.findAllByUser(user));
     }
 
 
-    public List<TodoResponseDto> readTodos() {
-        return convertToDtoList(todoRepository.getTodoByStatusIs(Status.TODO)
+    public List<TodoResponseDto> readTodos(String currentUsername) {
+        User user = userService.getByUsername(currentUsername);
+        return convertToDtoList(todoRepository.getTodoByUserAndStatusIs(user, Status.TODO)
                 .orElseThrow(() -> new RuntimeException("TODO")));
     }
 
-    public List<TodoResponseDto> readDones() {
-        return convertToDtoList(todoRepository.getTodoByStatusIs(Status.DONE)
+    public List<TodoResponseDto> readDones(String currentUsername) {
+        User user = userService.getByUsername(currentUsername);
+        return convertToDtoList(todoRepository.getTodoByUserAndStatusIs(user, Status.DONE)
                 .orElseThrow(() -> new RuntimeException("TODO")));
     }
 

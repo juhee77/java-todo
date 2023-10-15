@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -43,5 +45,13 @@ public class UserService {
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    public User getByUsername(String currentUsername) {
+        Optional<User> byUsername = userRepository.findByUsername(currentUsername);
+        if (byUsername.isEmpty()) {
+            throw new RuntimeException("존재하지 않는 유저이름입니다.");
+        }
+        return byUsername.get();
     }
 }
